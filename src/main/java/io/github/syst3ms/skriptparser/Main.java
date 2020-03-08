@@ -1,10 +1,12 @@
 package io.github.syst3ms.skriptparser;
 
+import com.google.common.collect.Lists;
 import io.github.syst3ms.skriptparser.log.LogEntry;
 import io.github.syst3ms.skriptparser.parsing.ScriptLoader;
 import io.github.syst3ms.skriptparser.registration.DefaultRegistration;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import io.github.syst3ms.skriptparser.util.FileUtils;
+import org.apache.commons.cli.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,7 +15,6 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.jar.JarFile;
@@ -24,21 +25,36 @@ public class Main {
     private static SkriptRegistration registration;
 
     public static void main(String[] args) {
-        boolean debug = false;
-        String scriptName = "";
-        String[] programArgs = new String[0];
-        if (args.length == 0) {
-            System.err.println("You need to provide a script name !");
+        Options options = new Options();
+
+        Option scriptNameOption = new Option("s", "script", true, "Skript files that need to parse");
+        scriptNameOption.setRequired(true);
+        options.addOption(scriptNameOption);
+
+        Option debugOption = new Option("d", "debug", false, "Turn on or off the debug log");
+        options.addOption(debugOption);
+
+        CommandLineParser parser = new DefaultParser();
+        HelpFormatter formatter = new HelpFormatter();
+        CommandLine cmd = null;
+
+        try {
+            cmd = parser.parse(options, args);
+        } catch (ParseException e) {
+            System.out.println(e.getMessage());
+            formatter.printHelp("utility-name", options);
             System.exit(1);
-        } else if (args.length > 1 && args[0].equals("--debug")) {
-            debug = true;
-            scriptName = args[1];
-            programArgs = Arrays.copyOfRange(args, 2, args.length);
-        } else {
-            scriptName = args[0];
-            programArgs = Arrays.copyOfRange(args, 1, args.length);
         }
-        init(scriptName, programArgs, new String[0], new String[0], debug, true);
+
+        boolean debug = Boolean.parseBoolean(cmd.getOptionValue("debug"));
+        String scriptName = cmd.getOptionValue("script");
+
+        init(scriptName,
+                Lists.newArrayList("io.github.syst3ms.skriptparser"),
+                Lists.newArrayList("expressions", "effects", "event", "lang"),
+                Lists.newArrayList(),
+                debug,
+                true);
     }
 
     /**
@@ -52,21 +68,16 @@ public class Main {
      * @param debug whether to active debug mode or not
      * @param standalone whether the parser tries to load addons (standalone) or not (library)
      */
-    public static void init(String scriptName, String[] mainPackages, String[] subPackages, String[] programArgs, boolean debug, boolean standalone) {
+    public static void init(String scriptName, List<String> mainPackages, List<String> subPackages, List<String> programArgs, boolean debug, boolean standalone) {
         Skript skript = new Skript(programArgs);
         registration = new SkriptRegistration(skript);
         DefaultRegistration.register();
         // Make sure Skript loads properly no matter what
-        mainPackages = Arrays.copyOf(mainPackages, mainPackages.length + 1);
-        mainPackages[mainPackages.length - 1] = "io.github.syst3ms.skriptparser";
-        List<String> sub = Arrays.asList(subPackages);
-        sub.addAll(Arrays.asList("expressions", "effects", "event", "lang"));
-        subPackages = sub.toArray(new String[0]);
         try {
             for (String mainPackage : mainPackages) {
-                FileUtils.loadClasses(mainPackage, subPackages);
+                FileUtils.loadClasses(mainPackage, subPackages.toArray(new String[0]));
             }
-            if (standalone) {
+            if (!standalone) {
                 File addonFolder = new File(".", "addons");
                 if (addonFolder.exists() && addonFolder.isDirectory()) {
                     File[] addons = addonFolder.listFiles();
