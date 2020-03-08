@@ -1,5 +1,6 @@
 package io.github.syst3ms.skriptparser;
 
+import com.google.common.collect.Lists;
 import io.github.syst3ms.skriptparser.registration.DefaultRegistration;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import io.github.syst3ms.skriptparser.util.FileUtils;
@@ -15,7 +16,7 @@ public class TestRegistration {
         try {
             Field regField = Main.class.getDeclaredField("registration");
             regField.setAccessible(true);
-            regField.set(null, new SkriptRegistration(new Skript(new String[0])));
+            regField.set(null, new SkriptRegistration(new Skript(Lists.newArrayList())));
             Field jarField = FileUtils.class.getDeclaredField("jarFile");
             jarField.setAccessible(true);
             jarField.set(null, new File("./build/libs", "skript-parser.jar"));
