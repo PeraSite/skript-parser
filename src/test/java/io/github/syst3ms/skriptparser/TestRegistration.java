@@ -24,7 +24,7 @@ public class TestRegistration {
         }
         DefaultRegistration.register();
         try {
-            FileUtils.loadClasses("io.github.syst3ms.skriptparser", "effects", "expressions", "lang");
+            FileUtils.loadClasses("io.github.syst3ms.skriptparser", "effects", "expressions", "event", "lang");
         } catch (IOException | URISyntaxException e) {
             e.printStackTrace();
         }
