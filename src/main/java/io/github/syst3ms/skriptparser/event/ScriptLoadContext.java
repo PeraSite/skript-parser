@@ -1,13 +1,15 @@
 package io.github.syst3ms.skriptparser.event;
 
+import java.util.List;
+
 /**
  * The script loading context, equivalent to
  * {@code public static void main(String[] args)} in Java
  */
 public class ScriptLoadContext implements TriggerContext {
-    private final String[] args;
+    private final List<String> args;
 
-    public ScriptLoadContext(String[] args) {
+    public ScriptLoadContext(List<String> args) {
         this.args = args;
     }
 
@@ -16,7 +18,7 @@ public class ScriptLoadContext implements TriggerContext {
         return "main";
     }
 
-    public String[] getArguments() {
+    public List<String> getArguments() {
         return args;
     }
 }

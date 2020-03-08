@@ -12,10 +12,10 @@ import java.util.List;
  * The {@link SkriptAddon} representing Skript itself
  */
 public class Skript extends SkriptAddon {
-    private final String[] mainArgs;
+    private final List<String> mainArgs;
     private List<Trigger> mainTriggers = new ArrayList<>();
 
-    public Skript(String[] mainArgs) {
+    public Skript(List<String> mainArgs) {
         this.mainArgs = mainArgs;
     }
 
