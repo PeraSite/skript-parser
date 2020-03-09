@@ -1,6 +1,6 @@
 package io.github.syst3ms.skriptparser.lang;
 
-import io.github.syst3ms.skriptparser.classes.ChangeMode;
+import io.github.syst3ms.skriptparser.effects.EffChange;
 import io.github.syst3ms.skriptparser.event.TriggerContext;
 import io.github.syst3ms.skriptparser.lang.base.ConvertedExpression;
 import io.github.syst3ms.skriptparser.parsing.SkriptParserException;
@@ -35,15 +35,15 @@ public interface Expression<T> extends SyntaxElement {
     }
 
     /**
-     * Determines whether this expression can be changed according to a specific {@link ChangeMode}, and what type
+     * Determines whether this expression can be changed according to a specific {@link EffChange.ChangeMode}, and what type
      * of values it can be changed with.
      * @param mode the mode this Expression would be changed with
      * @return an array of classes describing what types this Expression can be changed with, or {@code null} if it
-     *         shouldn't be changed with the given {@linkplain ChangeMode change mode}. If the change mode is
-     *         {@link ChangeMode#DELETE} or {@link ChangeMode#RESET}, then an empty array should be returned.
+     *         shouldn't be changed with the given {@linkplain EffChange.ChangeMode change mode}. If the change mode is
+     *         {@link EffChange.ChangeMode#DELETE} or {@link EffChange.ChangeMode#RESET}, then an empty array should be returned.
      */
     @Nullable
-    default Class<?>[] acceptsChange(ChangeMode mode) {
+    default Class<?>[] acceptsChange(EffChange.ChangeMode mode) {
         return null;
     }
 
@@ -53,7 +53,7 @@ public interface Expression<T> extends SyntaxElement {
      * @param changeWith the values to change this Expression with
      * @param changeMode the mode of change
      */
-    default void change(TriggerContext ctx, Object[] changeWith, ChangeMode changeMode) {}
+    default void change(TriggerContext ctx, Object[] changeWith, EffChange.ChangeMode changeMode) {}
 
     /**
      * Gets a single value out of this Expression

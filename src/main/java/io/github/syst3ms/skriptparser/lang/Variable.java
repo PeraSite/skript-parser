@@ -1,6 +1,6 @@
 package io.github.syst3ms.skriptparser.lang;
 
-import io.github.syst3ms.skriptparser.classes.ChangeMode;
+import io.github.syst3ms.skriptparser.effects.EffChange;
 import io.github.syst3ms.skriptparser.event.TriggerContext;
 import io.github.syst3ms.skriptparser.parsing.ParseContext;
 import io.github.syst3ms.skriptparser.parsing.SkriptRuntimeException;
@@ -253,15 +253,15 @@ public class Variable<T> implements Expression<T> {
     }
 
     @Override
-    public Class<?>[] acceptsChange(ChangeMode mode) {
-        if (!list && mode == ChangeMode.SET)
+    public Class<?>[] acceptsChange(EffChange.ChangeMode mode) {
+        if (!list && mode == EffChange.ChangeMode.SET)
             return new Class[]{Object[].class};
         return new Class[]{Object[].class};
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    public void change(TriggerContext ctx, Object[] changeWith, ChangeMode mode) throws UnsupportedOperationException {
+    public void change(TriggerContext ctx, Object[] changeWith, EffChange.ChangeMode mode) throws UnsupportedOperationException {
         switch (mode) {
             case DELETE:
                 if (list) {
@@ -309,10 +309,10 @@ public class Variable<T> implements Expression<T> {
                     Type<?> type = TypeManager.getByClass(c);
                     assert type != null;
                     Changer<?> changer = type.getDefaultChanger();
-                    if (changer != null && changer.acceptsChange(ChangeMode.RESET) != null) {
+                    if (changer != null && changer.acceptsChange(EffChange.ChangeMode.RESET) != null) {
                         Object[] one = (Object[]) Array.newInstance(o.getClass(), 1);
                         one[0] = o;
-                        ((Changer) changer).change(one, new Object[0], ChangeMode.RESET);
+                        ((Changer) changer).change(one, new Object[0], EffChange.ChangeMode.RESET);
                     }
                 }
                 break;
@@ -322,7 +322,7 @@ public class Variable<T> implements Expression<T> {
                 assert changeWith.length > 0;
                 if (list) {
                     Map<String, Object> o = (Map<String, Object>) getRaw(ctx);
-                    if (mode == ChangeMode.REMOVE) {
+                    if (mode == EffChange.ChangeMode.REMOVE) {
                         if (o == null)
                             return;
                         ArrayList<String> rem = new ArrayList<>(); // prevents CMEs
@@ -338,7 +338,7 @@ public class Variable<T> implements Expression<T> {
                             assert r != null;
                             setIndex(ctx, r, null);
                         }
-                    } else if (mode == ChangeMode.REMOVE_ALL) {
+                    } else if (mode == EffChange.ChangeMode.REMOVE_ALL) {
                         if (o == null)
                             return;
                         ArrayList<String> rem = new ArrayList<>(); // prevents CMEs
@@ -353,7 +353,7 @@ public class Variable<T> implements Expression<T> {
                             setIndex(ctx, r, null);
                         }
                     } else {
-                        assert mode == ChangeMode.ADD;
+                        assert mode == EffChange.ChangeMode.ADD;
                         int i = 1;
                         for (Object d : changeWith) {
                             if (o != null)
@@ -390,7 +390,7 @@ public class Variable<T> implements Expression<T> {
                             Class<?> r = a.getRelativeType();
                             Object diff = Converters.convert(d, r);
                             if (diff != null) {
-                                if (mode == ChangeMode.ADD)
+                                if (mode == EffChange.ChangeMode.ADD)
                                     o = a.add(o, diff);
                                 else
                                     o = a.subtract(o, diff);
