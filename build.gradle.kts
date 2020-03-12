@@ -16,7 +16,7 @@ dependencies {
     compile("org.jetbrains:annotations:15.0")
     implementation(group = "commons-cli", name = "commons-cli", version = "1.4")
     testImplementation("junit:junit:4.12")
-    implementation("org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT")
+    compile("org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT")
 }
 
 tasks.create<Jar>("fatJar") {
