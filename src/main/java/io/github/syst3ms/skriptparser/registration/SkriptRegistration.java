@@ -1,21 +1,20 @@
 package io.github.syst3ms.skriptparser.registration;
 
-import io.github.syst3ms.skriptparser.pattern.PatternParser;
-import io.github.syst3ms.skriptparser.event.TriggerContext;
-import io.github.syst3ms.skriptparser.lang.CodeSection;
-import io.github.syst3ms.skriptparser.lang.Effect;
-import io.github.syst3ms.skriptparser.lang.Expression;
-import io.github.syst3ms.skriptparser.lang.SkriptEvent;
-import io.github.syst3ms.skriptparser.lang.SyntaxElement;
+import io.github.syst3ms.skriptparser.parsing.pattern.PatternParser;
+import io.github.syst3ms.skriptparser.context.TriggerContext;
+import io.github.syst3ms.skriptparser.sections.CodeSection;
+import io.github.syst3ms.skriptparser.statements.Effect;
+import io.github.syst3ms.skriptparser.expressions.Expression;
+import io.github.syst3ms.skriptparser.events.SkriptEvent;
+import io.github.syst3ms.skriptparser.statements.SyntaxElement;
 import io.github.syst3ms.skriptparser.parsing.SkriptParserException;
-import io.github.syst3ms.skriptparser.pattern.PatternElement;
+import io.github.syst3ms.skriptparser.parsing.pattern.PatternElement;
 import io.github.syst3ms.skriptparser.types.Type;
 import io.github.syst3ms.skriptparser.types.TypeManager;
 import io.github.syst3ms.skriptparser.types.changers.Arithmetic;
 import io.github.syst3ms.skriptparser.types.changers.Changer;
 import io.github.syst3ms.skriptparser.types.conversions.Converters;
 import io.github.syst3ms.skriptparser.util.MultiMap;
-import io.github.syst3ms.skriptparser.util.StringUtils;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -227,6 +226,15 @@ public class SkriptRegistration {
     }
 
     /**
+     * Registers a {@link Type}
+     * @param type the type class that will be registered
+     */
+    public <T> void addType(Type<T> type) {
+        types.add(type);
+        TypeManager.register(type);
+    }
+
+    /**
      * Starts a registration process for a {@link Type}
      * @param c the class the Type represents
      * @param pattern the Type's pattern
@@ -284,7 +292,7 @@ public class SkriptRegistration {
         private final Class<C> c;
         private final String baseName;
         private final String pattern;
-        private Function<? super C, String> toStringFunction = o -> Objects.toString(o, TypeManager.NULL_REPRESENTATION);
+        private Function<C, String> toStringFunction = o -> Objects.toString(o, TypeManager.NULL_REPRESENTATION);
         @Nullable
         private Function<String, ? extends C> literalParser;
         @Nullable
@@ -311,7 +319,7 @@ public class SkriptRegistration {
          * @param toStringFunction a function converting an instance of the type to a String
          * @return the registrar
          */
-        public TypeRegistrar<C> toStringFunction(Function<? super C, String> toStringFunction) {
+        public TypeRegistrar<C> toStringFunction(Function<C, String> toStringFunction) {
             this.toStringFunction = c -> c == null ? TypeManager.NULL_REPRESENTATION : toStringFunction.apply(c);
             return this;
         }
@@ -340,7 +348,9 @@ public class SkriptRegistration {
         @Override
         public void register() {
             newTypes = true;
-            types.add(new Type<>(c, baseName, pattern, literalParser, toStringFunction, defaultChanger, arithmetic));
+            Type<C> type = new Type<>(c, baseName, pattern, literalParser, toStringFunction, defaultChanger, arithmetic);
+            types.add(type);
+            TypeManager.register(type);
         }
     }
 
@@ -351,7 +361,6 @@ public class SkriptRegistration {
 
         SyntaxRegistrar(Class<C> c, String... patterns) {
             this(c, 5, patterns);
-            typeCheck();
         }
 
         SyntaxRegistrar(Class<C> c, int priority, String... patterns) {
@@ -379,7 +388,6 @@ public class SkriptRegistration {
 
         ExpressionRegistrar(Class<C> c, Class<T> returnType, boolean isSingle) {
             this(c, returnType, isSingle, new String[0]);
-            typeCheck();
         }
 
         ExpressionRegistrar(Class<C> c, Class<T> returnType, boolean isSingle, String... patterns) {
@@ -406,7 +414,6 @@ public class SkriptRegistration {
 
         EffectRegistrar(Class<C> c, String... patterns) {
             super(c, patterns);
-            typeCheck();
         }
 
         public void register() {
@@ -423,7 +430,6 @@ public class SkriptRegistration {
 
         SectionRegistrar(Class<C> c, String... patterns) {
             super(c, patterns);
-            typeCheck();
         }
 
         @Override
@@ -442,7 +448,6 @@ public class SkriptRegistration {
 
         EventRegistrar(Class<T> c, String... patterns) {
             super(c, patterns);
-            typeCheck();
         }
 
         @Override
@@ -467,10 +472,4 @@ public class SkriptRegistration {
         }
     }
 
-    private void typeCheck() {
-        if (newTypes) {
-            TypeManager.register(this);
-            newTypes = false;
-        }
-    }
 }

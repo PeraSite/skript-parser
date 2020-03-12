@@ -1,6 +1,6 @@
 package io.github.syst3ms.skriptparser.registration;
 
-import io.github.syst3ms.skriptparser.lang.Trigger;
+import io.github.syst3ms.skriptparser.sections.Trigger;
 
 import java.util.ArrayList;
 import java.util.List;

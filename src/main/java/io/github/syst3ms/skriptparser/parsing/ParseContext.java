@@ -1,9 +1,9 @@
 package io.github.syst3ms.skriptparser.parsing;
 
-import io.github.syst3ms.skriptparser.event.TriggerContext;
-import io.github.syst3ms.skriptparser.lang.Expression;
+import io.github.syst3ms.skriptparser.context.TriggerContext;
+import io.github.syst3ms.skriptparser.expressions.Expression;
 import io.github.syst3ms.skriptparser.log.SkriptLogger;
-import io.github.syst3ms.skriptparser.pattern.PatternElement;
+import io.github.syst3ms.skriptparser.parsing.pattern.PatternElement;
 
 import java.util.List;
 import java.util.regex.MatchResult;

@@ -2,17 +2,10 @@ package io.github.syst3ms.skriptparser.util;
 
 import io.github.syst3ms.skriptparser.Skript;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
@@ -64,10 +57,10 @@ public class FileUtils {
         String[] lines = multilineText.split("\0");
         // Inspired from Kotlin's trimIndent() function
         int baseIndent = Arrays.stream(lines)
-                               .skip(1) // First line's indent should be ignored
-                               .mapToInt(FileUtils::getIndentationLevel)
-                               .min()
-                               .orElse(0);
+                .skip(1) // First line's indent should be ignored
+                .mapToInt(FileUtils::getIndentationLevel)
+                .min()
+                .orElse(0);
         if (baseIndent == 0)
             return multilineText.replace("\0", "");
         Pattern pat = Pattern.compile("\\t| {4}");
@@ -88,6 +81,7 @@ public class FileUtils {
         basePackage = basePackage.replace('.', '/') + "/";
         try (JarFile jar = new JarFile(getFile())) {
             Enumeration<JarEntry> entries = jar.entries();
+            List<String> classes = new ArrayList<>();
             while (entries.hasMoreElements()) {
                 JarEntry e = entries.nextElement();
                 if (e.getName().startsWith(basePackage) && e.getName().endsWith(".class")) {
@@ -100,12 +94,31 @@ public class FileUtils {
                     }
                     if (load) {
                         final String c = e.getName().replace('/', '.').substring(0, e.getName().length() - ".class".length());
-                        try {
-                            Class.forName(c, true, FileUtils.class.getClassLoader());
-                        } catch (final ClassNotFoundException | ExceptionInInitializerError ex) {
-                            ex.printStackTrace();
-                        }
+                        classes.add(c);
                     }
+                }
+            }
+
+            ClassLoader classLoader = FileUtils.class.getClassLoader();
+
+            classes.sort((s1, s2) -> {
+                try {
+                    RegisterPriority a1 = Class.forName(s1, false, classLoader).getAnnotation(RegisterPriority.class);
+                    RegisterPriority a2 = Class.forName(s2, false, classLoader).getAnnotation(RegisterPriority.class);
+                    Priority p1 = a1 == null ? Priority.NORMAL : a1.priority();
+                    Priority p2 = a2 == null ? Priority.NORMAL : a2.priority();
+                    return Integer.compare(p1.value, p2.value);
+                } catch (final ClassNotFoundException | ExceptionInInitializerError ex) {
+                    ex.printStackTrace();
+                }
+                return 0;
+            });
+
+            for (String clazz : classes) {
+                try {
+                    Class.forName(clazz, true, classLoader);
+                } catch (final ClassNotFoundException | ExceptionInInitializerError ex) {
+                    ex.printStackTrace();
                 }
             }
         }

@@ -1,8 +1,8 @@
 package io.github.syst3ms.skriptparser.registration;
 
-import io.github.syst3ms.skriptparser.event.TriggerContext;
-import io.github.syst3ms.skriptparser.lang.SkriptEvent;
-import io.github.syst3ms.skriptparser.pattern.PatternElement;
+import io.github.syst3ms.skriptparser.context.TriggerContext;
+import io.github.syst3ms.skriptparser.events.SkriptEvent;
+import io.github.syst3ms.skriptparser.parsing.pattern.PatternElement;
 
 import java.util.List;
 

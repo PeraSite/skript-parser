@@ -1,9 +1,9 @@
 package io.github.syst3ms.skriptparser.variables;
 
-import io.github.syst3ms.skriptparser.event.TriggerContext;
-import io.github.syst3ms.skriptparser.lang.Expression;
-import io.github.syst3ms.skriptparser.lang.Variable;
-import io.github.syst3ms.skriptparser.lang.VariableString;
+import io.github.syst3ms.skriptparser.context.TriggerContext;
+import io.github.syst3ms.skriptparser.expressions.Expression;
+import io.github.syst3ms.skriptparser.expressions.Variable;
+import io.github.syst3ms.skriptparser.expressions.VariableString;
 import io.github.syst3ms.skriptparser.log.ErrorType;
 import io.github.syst3ms.skriptparser.log.SkriptLogger;
 import org.jetbrains.annotations.Nullable;

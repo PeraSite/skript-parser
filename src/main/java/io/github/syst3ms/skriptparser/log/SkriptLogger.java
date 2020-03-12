@@ -1,7 +1,7 @@
 package io.github.syst3ms.skriptparser.log;
 
-import io.github.syst3ms.skriptparser.file.FileElement;
-import io.github.syst3ms.skriptparser.file.FileSection;
+import io.github.syst3ms.skriptparser.parsing.file.FileElement;
+import io.github.syst3ms.skriptparser.parsing.file.FileSection;
 
 import java.util.ArrayList;
 import java.util.Comparator;

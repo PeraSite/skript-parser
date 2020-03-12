@@ -6,7 +6,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Objects;
 
 /**
  * Manages the registration and usage of {@link Type}
@@ -93,7 +92,7 @@ public class TypeManager {
             if (type == null) {
                 sb.append(o);
             } else {
-                sb.append(type.getToStringFunction().apply(o));
+                sb.append(type.convertString(o));
             }
         }
         return sb.length() == 0 ? EMPTY_REPRESENTATION : sb.toString();
@@ -123,5 +122,10 @@ public class TypeManager {
             nameToType.put(type.getBaseName(), type);
             classToType.put(type.getTypeClass(), type);
         }
+    }
+
+    public static void register(Type<?> type) {
+        nameToType.put(type.getBaseName(), type);
+        classToType.put(type.getTypeClass(), type);
     }
 }

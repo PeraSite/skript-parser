@@ -1,9 +1,9 @@
 package io.github.syst3ms.skriptparser.registration;
 
-import io.github.syst3ms.skriptparser.lang.Expression;
-import io.github.syst3ms.skriptparser.lang.SkriptEvent;
-import io.github.syst3ms.skriptparser.lang.SyntaxElement;
-import io.github.syst3ms.skriptparser.pattern.PatternElement;
+import io.github.syst3ms.skriptparser.expressions.Expression;
+import io.github.syst3ms.skriptparser.events.SkriptEvent;
+import io.github.syst3ms.skriptparser.statements.SyntaxElement;
+import io.github.syst3ms.skriptparser.parsing.pattern.PatternElement;
 
 import java.util.List;
 

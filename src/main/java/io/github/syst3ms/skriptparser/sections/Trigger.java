@@ -1,0 +1,42 @@
+package io.github.syst3ms.skriptparser.sections;
+
+import io.github.syst3ms.skriptparser.events.SkriptEvent;
+import io.github.syst3ms.skriptparser.context.TriggerContext;
+import io.github.syst3ms.skriptparser.expressions.Expression;
+import io.github.syst3ms.skriptparser.statements.Statement;
+import io.github.syst3ms.skriptparser.log.SkriptLogger;
+import io.github.syst3ms.skriptparser.parsing.ParseContext;
+import io.github.syst3ms.skriptparser.parsing.file.FileSection;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * A top-level section, that is not contained in code.
+ * Usually declares an event.
+ */
+public class Trigger extends CodeSection {
+    private final SkriptEvent event;
+
+    public Trigger(SkriptEvent event) {
+        this.event = event;
+    }
+
+    @Override
+    public boolean init(Expression<?>[] expressions, int matchedPattern, ParseContext parseContext) {
+        return true;
+    }
+
+    @Override
+    public void loadSection(FileSection section, SkriptLogger logger) {
+        setItems(event.loadSection(section, logger));
+    }
+
+    @Override
+    protected Statement walk(TriggerContext ctx) {
+        return getFirst();
+    }
+
+    @Override
+    public String toString(@Nullable TriggerContext ctx, boolean debug) {
+        return event.toString(ctx, debug);
+    }
+}

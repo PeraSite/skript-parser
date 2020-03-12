@@ -1,8 +1,8 @@
 package io.github.syst3ms.skriptparser.types.changers;
 
-import io.github.syst3ms.skriptparser.effects.EffChange;
-import io.github.syst3ms.skriptparser.event.TriggerContext;
-import io.github.syst3ms.skriptparser.lang.Expression;
+import io.github.syst3ms.skriptparser.premade.effects.EffChange;
+import io.github.syst3ms.skriptparser.context.TriggerContext;
+import io.github.syst3ms.skriptparser.expressions.Expression;
 
 /**
  * An interface for anything that can be changed

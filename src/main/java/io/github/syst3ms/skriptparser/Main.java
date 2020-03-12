@@ -1,9 +1,7 @@
 package io.github.syst3ms.skriptparser;
 
-import com.google.common.collect.Lists;
 import io.github.syst3ms.skriptparser.log.LogEntry;
 import io.github.syst3ms.skriptparser.parsing.ScriptLoader;
-import io.github.syst3ms.skriptparser.registration.DefaultRegistration;
 import io.github.syst3ms.skriptparser.registration.SkriptRegistration;
 import io.github.syst3ms.skriptparser.util.FileUtils;
 import org.apache.commons.cli.*;
@@ -15,8 +13,7 @@ import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -50,9 +47,9 @@ public class Main {
         String scriptName = cmd.getOptionValue("script");
 
         init(scriptName,
-                Lists.newArrayList("io.github.syst3ms.skriptparser"),
-                Lists.newArrayList("expressions", "effects", "event", "lang"),
-                Lists.newArrayList(),
+                Collections.singletonList("io.github.syst3ms.skriptparser.premade"),
+                Arrays.asList("comparators", "conditions", "effects", "events", "expressions", "types"),
+                Collections.emptyList(),
                 debug,
                 true);
     }
@@ -71,7 +68,6 @@ public class Main {
     public static void init(String scriptName, List<String> mainPackages, List<String> subPackages, List<String> programArgs, boolean debug, boolean standalone) {
         Skript skript = new Skript(programArgs);
         registration = new SkriptRegistration(skript);
-        DefaultRegistration.register();
         // Make sure Skript loads properly no matter what
         try {
             for (String mainPackage : mainPackages) {

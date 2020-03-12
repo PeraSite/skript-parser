@@ -1,8 +1,8 @@
 package io.github.syst3ms.skriptparser.registration;
 
-import io.github.syst3ms.skriptparser.lang.CodeSection;
-import io.github.syst3ms.skriptparser.lang.Effect;
-import io.github.syst3ms.skriptparser.lang.Expression;
+import io.github.syst3ms.skriptparser.sections.CodeSection;
+import io.github.syst3ms.skriptparser.statements.Effect;
+import io.github.syst3ms.skriptparser.expressions.Expression;
 import io.github.syst3ms.skriptparser.util.MultiMap;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,9 +63,12 @@ public class SyntaxManager {
     public static <E extends Expression<T>, T> ExpressionInfo<E, T> getExpressionExact(Expression<T> expr) {
         Class<?> c = expr.getSource().getClass();
         for (ExpressionInfo<?, ?> info : SyntaxManager.getAllExpressions()) {
+            System.out.print(info.getSyntaxClass().getSimpleName() + " == " + c.getSimpleName());
             if (info.getSyntaxClass() == c) {
+                System.out.println(": true");
                 return (ExpressionInfo<E, T>) info;
             }
+            System.out.println(": false");
         }
         return null;
     }

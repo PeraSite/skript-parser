@@ -1,7 +1,7 @@
 package io.github.syst3ms.skriptparser.registration;
 
-import io.github.syst3ms.skriptparser.lang.Expression;
-import io.github.syst3ms.skriptparser.pattern.PatternElement;
+import io.github.syst3ms.skriptparser.expressions.Expression;
+import io.github.syst3ms.skriptparser.parsing.pattern.PatternElement;
 import io.github.syst3ms.skriptparser.types.PatternType;
 import io.github.syst3ms.skriptparser.types.Type;
 

@@ -1,15 +1,15 @@
 package io.github.syst3ms.skriptparser.parsing;
 
-import io.github.syst3ms.skriptparser.file.FileElement;
-import io.github.syst3ms.skriptparser.file.FileParser;
-import io.github.syst3ms.skriptparser.file.FileSection;
-import io.github.syst3ms.skriptparser.file.VoidElement;
-import io.github.syst3ms.skriptparser.lang.CodeSection;
-import io.github.syst3ms.skriptparser.lang.Conditional;
-import io.github.syst3ms.skriptparser.lang.Expression;
-import io.github.syst3ms.skriptparser.lang.Loop;
-import io.github.syst3ms.skriptparser.lang.Statement;
-import io.github.syst3ms.skriptparser.lang.Trigger;
+import io.github.syst3ms.skriptparser.parsing.file.FileElement;
+import io.github.syst3ms.skriptparser.parsing.file.FileParser;
+import io.github.syst3ms.skriptparser.parsing.file.FileSection;
+import io.github.syst3ms.skriptparser.parsing.file.VoidElement;
+import io.github.syst3ms.skriptparser.sections.CodeSection;
+import io.github.syst3ms.skriptparser.sections.Conditional;
+import io.github.syst3ms.skriptparser.expressions.Expression;
+import io.github.syst3ms.skriptparser.sections.Loop;
+import io.github.syst3ms.skriptparser.statements.Statement;
+import io.github.syst3ms.skriptparser.sections.Trigger;
 import io.github.syst3ms.skriptparser.log.ErrorType;
 import io.github.syst3ms.skriptparser.log.LogEntry;
 import io.github.syst3ms.skriptparser.log.SkriptLogger;
