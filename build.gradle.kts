@@ -6,17 +6,17 @@ plugins {
 val mainClassName = "io.github.syst3ms.skriptparser.Main"
 
 repositories {
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
     mavenCentral()
     jcenter()
 }
 
 dependencies {
-    implementation("com.google.guava:guava:27.0.1-jre")
     compile("org.jetbrains:annotations:15.0")
-    compile(group = "com.google.code.findbugs", name = "jsr305", version = "3.0.2")
     implementation(group = "commons-cli", name = "commons-cli", version = "1.4")
-
     testImplementation("junit:junit:4.12")
+    implementation("org.spigotmc:spigot-api:1.15.2-R0.1-SNAPSHOT")
 }
 
 tasks.create<Jar>("fatJar") {
